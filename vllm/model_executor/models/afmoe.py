@@ -617,7 +617,10 @@ class AfmoeForCausalLM(nn.Module, SupportsPP, SupportsLoRA):
         )
         if get_pp_group().is_last_rank:
             self.lm_head = ParallelLMHead(
-                config.vocab_size, config.hidden_size, quant_config=quant_config
+                config.vocab_size,
+                config.hidden_size,
+                quant_config=quant_config,
+                params_dtype=torch.float32,
             )
         else:
             self.lm_head = PPMissingLayer()
