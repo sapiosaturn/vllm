@@ -85,7 +85,6 @@ class AfmoeMoE(nn.Module):
             config.hidden_size,
             config.num_experts,
             bias=False,
-            dtype=torch.float32,
         )
         self.expert_bias = nn.Parameter(
             torch.empty(config.num_experts, dtype=torch.float32)
@@ -144,7 +143,7 @@ class AfmoeMoE(nn.Module):
         num_tokens, hidden_dim = hidden_states.shape
         hidden_states = hidden_states.view(-1, hidden_dim)
 
-        router_logits = self.gate(hidden_states.to(dtype=torch.float32))
+        router_logits = self.gate(hidden_states)
 
         fused_moe_out = self.experts(
             hidden_states=hidden_states, router_logits=router_logits
